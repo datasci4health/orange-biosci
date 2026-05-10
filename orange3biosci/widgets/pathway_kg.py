@@ -3,7 +3,8 @@ import uuid
 from collections import defaultdict
 from importlib.resources import files
 
-from AnyQt.QtWidgets import QFileDialog
+from AnyQt.QtCore import QTimer
+from AnyQt.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit, QPushButton
 
 from Orange.widgets import widget, gui
 from Orange.widgets.settings import Setting
@@ -17,14 +18,20 @@ class OWPathwayKG(widget.OWWidget):
     description = "Convert KEGG KGML into a Knowledge Graph"
     icon = str(files("orange3biosci") / "icons/PathwayKG.svg")
     priority = 10
+    resizing_enabled = False
 
     class Outputs:
         nodes = widget.Output("Nodes", Table)
         edges = widget.Output("Edges", Table)
 
+    class Error(widget.OWWidget.Error):
+        file_error = widget.Msg("{}")
+
     want_main_area = False
 
     filename = Setting("")
+    relative_to_workflow = Setting(False)
+    auto_extract = Setting(False)
 
     # ------------------------------------------------------------
     # UI
@@ -35,36 +42,120 @@ class OWPathwayKG(widget.OWWidget):
 
         box = gui.widgetBox(self.controlArea, "KGML File")
 
-        gui.button(box, self, "Load KGML",
-                   callback=self.load_file)
+        self.file_edit = QLineEdit()
+        self.file_edit.setText(self.filename)
+        self.file_edit.textChanged.connect(self.on_file_changed)
+        self.file_edit.editingFinished.connect(self.on_file_edit_finished)
 
-        self.file_label = gui.label(box, self, "No file loaded")
+        browse_button = QPushButton("Browse")
+        browse_button.clicked.connect(self.browse_file)
 
-    def load_file(self):
+        file_layout = QHBoxLayout()
+        file_layout.addWidget(self.file_edit)
+        file_layout.addWidget(browse_button)
+        gui.widgetBox(box).layout().addLayout(file_layout)
+
+        gui.checkBox(
+            box, self, "relative_to_workflow", "Relative to Workflow File",
+            callback=self.on_relative_path_changed
+        )
+
+        actions_box = gui.widgetBox(self.controlArea, orientation="horizontal")
+        self.extract_button = gui.button(
+            actions_box, self, "Extract KG", callback=self.process
+        )
+        gui.checkBox(
+            actions_box, self, "auto_extract", "Extract Automatically",
+            callback=self.on_auto_extract_changed
+        )
+
+        # self.setFixedSize(self.layout().sizeHint())
+        self.adjustSize()
+
+        if self.auto_extract and self.filename:
+            QTimer.singleShot(0, self.process)
+
+    def browse_file(self):
         fname, _ = QFileDialog.getOpenFileName(
             self, "Open KGML", "", "KGML files (*.xml *.kgml)"
         )
         if fname:
+            if self.relative_to_workflow:
+                fname = self.make_relative_path(fname)
             self.filename = fname
-            self.file_label.setText(os.path.basename(fname))
+            self.file_edit.setText(fname)
             self.setStatusMessage(os.path.basename(fname))
+            if self.auto_extract:
+                self.process()
+
+    def on_file_changed(self):
+        self.filename = self.file_edit.text()
+
+    def on_file_edit_finished(self):
+        if self.auto_extract:
             self.process()
+
+    def on_relative_path_changed(self):
+        if not self.filename:
+            return
+
+        if self.relative_to_workflow:
+            self.filename = self.make_relative_path(self.filename)
+        else:
+            self.filename = self.get_absolute_path(self.filename)
+        self.file_edit.setText(self.filename)
+
+    def on_auto_extract_changed(self):
+        if self.auto_extract:
+            self.process()
+
+    def make_relative_path(self, path):
+        workflow_dir = self.workflowEnv().get("basedir", "")
+        if workflow_dir and os.path.isabs(path):
+            try:
+                return os.path.relpath(path, workflow_dir)
+            except ValueError:
+                pass
+        return path
+
+    def get_absolute_path(self, path):
+        if path and not os.path.isabs(path):
+            workflow_dir = self.workflowEnv().get("basedir", "")
+            if workflow_dir:
+                return os.path.abspath(os.path.join(workflow_dir, path))
+        return path
+
+    def current_filename(self):
+        return self.get_absolute_path(self.filename)
 
     # ------------------------------------------------------------
     # Core processing
     # ------------------------------------------------------------
 
     def process(self):
+        self.Error.clear()
+
         if not self.filename:
+            self.Outputs.nodes.send(None)
+            self.Outputs.edges.send(None)
             return
 
-        tree = etree.parse(self.filename)
+        filename = self.current_filename()
+        try:
+            tree = etree.parse(filename)
+        except (OSError, etree.XMLSyntaxError) as exc:
+            self.Outputs.nodes.send(None)
+            self.Outputs.edges.send(None)
+            self.Error.file_error(str(exc))
+            return
+
         root = tree.getroot()
 
         nodes, edges = self.build_graph(root)
 
         self.Outputs.nodes.send(self.to_table(nodes))
         self.Outputs.edges.send(self.to_table(edges))
+        self.setStatusMessage(os.path.basename(filename))
 
     # ------------------------------------------------------------
     # Graph construction
@@ -197,9 +288,6 @@ class OWPathwayKG(widget.OWWidget):
         # -------------------------
         edges = []
 
-        def position_type(position_id):
-            return "reaction" if position_id.startswith("rn:") else "node"
-
         # --- Gene ↔ FU edges ---
         for eid, fus in entry_to_fu.items():
             genes = entries[eid]["genes"]
@@ -207,24 +295,21 @@ class OWPathwayKG(widget.OWWidget):
 
             for fu in fus:
                 for g in genes:
-                    for pos in pathway_positions:
-                        edges.append({
-                            "source": g,
-                            "target": fu,
-                            "edge_type": "gene_to_FU",
-                            "edge_subtype": "",
-                            "pathway_position_id": pos,
-                            "pathway_position_type": position_type(pos)
-                        })
+                    edges.append({
+                        "source": g,
+                        "target": fu,
+                        "edge_type": "gene_to_FU",
+                        "edge_subtype": "",
+                        "pathway_position_id": ""
+                    })
 
-                        edges.append({
-                            "source": fu,
-                            "target": g,
-                            "edge_type": "FU_to_gene",
-                            "edge_subtype": "",
-                            "pathway_position_id": pos,
-                            "pathway_position_type": position_type(pos)
-                        })
+                    edges.append({
+                        "source": fu,
+                        "target": g,
+                        "edge_type": "FU_to_gene",
+                        "edge_subtype": "",
+                        "pathway_position_id": ""
+                    })
 
                 # --- FU → pathway ---
                 for pos in pathway_positions:
@@ -233,8 +318,7 @@ class OWPathwayKG(widget.OWWidget):
                         "target": pathway_id,
                         "edge_type": "FU_to_pathway",
                         "edge_subtype": "",
-                        "pathway_position_id": pos,
-                        "pathway_position_type": position_type(pos)
+                        "pathway_position_id": pos
                     })
 
         # --- Relation edges (new part) ---
@@ -244,36 +328,27 @@ class OWPathwayKG(widget.OWWidget):
 
             subtypes = "|".join(rel["subtypes"])
 
-            src_positions = entries[src]["pathway_positions"]
-            tgt_positions = entries[tgt]["pathway_positions"]
-
-            pathway_positions = list(dict.fromkeys(src_positions + tgt_positions))
-
             # --- gene ↔ gene ---
             for g1 in entries[src]["genes"]:
                 for g2 in entries[tgt]["genes"]:
-                    for pos in pathway_positions:
-                        edges.append({
-                            "source": g1,
-                            "target": g2,
-                            "edge_type": rel["type"],
-                            "edge_subtype": subtypes,
-                            "pathway_position_id": pos,
-                            "pathway_position_type": position_type(pos)
-                        })
+                    edges.append({
+                        "source": g1,
+                        "target": g2,
+                        "edge_type": rel["type"],
+                        "edge_subtype": subtypes,
+                        "pathway_position_id": ""
+                    })
 
             # --- FU ↔ FU ---
             for fu1 in entry_to_fu[src]:
                 for fu2 in entry_to_fu[tgt]:
-                    for pos in pathway_positions:
-                        edges.append({
-                            "source": fu1,
-                            "target": fu2,
-                            "edge_type": rel["type"],
-                            "edge_subtype": subtypes,
-                            "pathway_position_id": pos,
-                            "pathway_position_type": position_type(pos)
-                        })
+                    edges.append({
+                        "source": fu1,
+                        "target": fu2,
+                        "edge_type": rel["type"],
+                        "edge_subtype": subtypes,
+                        "pathway_position_id": ""
+                    })
 
         return list(nodes.values()), edges
 
