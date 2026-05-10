@@ -306,13 +306,26 @@ class OWPathwayKG(widget.OWWidget):
                     if r.startswith("#"): r = r[1:]
                     rights.append(r)
 
+            subtypes = []
+            name_elem = elem.find("bp:displayName", ns)
+            if name_elem is not None and name_elem.text:
+                name_lower = name_elem.text.lower()
+                if "phosphorylat" in name_lower: subtypes.append("phosphorylation")
+                if "dephosphorylat" in name_lower: subtypes.append("dephosphorylation")
+                if "ubiquitinat" in name_lower and "deubiquitinat" not in name_lower: subtypes.append("ubiquitination")
+                if "deubiquitinat" in name_lower: subtypes.append("deubiquitination")
+                if "methylat" in name_lower and "demethylat" not in name_lower: subtypes.append("methylation")
+                if "demethylat" in name_lower: subtypes.append("demethylation")
+                if "acetylat" in name_lower and "deacetylat" not in name_lower: subtypes.append("acetylation")
+                if "deacetylat" in name_lower: subtypes.append("deacetylation")
+
             for l in lefts:
                 for r in rights:
                     relations.append({
                         "source": l,
                         "target": r,
-                        "type": "BiochemicalReaction",
-                        "subtypes": []
+                        "type": "biochemical_reaction",
+                        "subtypes": subtypes
                     })
 
         # Relations (Control)
@@ -331,13 +344,18 @@ class OWPathwayKG(widget.OWWidget):
                         if r.startswith("#"): r = r[1:]
                         controlleds.append(r)
 
+                ctrl_type_elem = elem.find("bp:controlType", ns)
+                ctrl_subtype = []
+                if ctrl_type_elem is not None and ctrl_type_elem.text:
+                    ctrl_subtype.append(ctrl_type_elem.text.lower())
+
                 for c in controllers:
                     for d in controlleds:
                         relations.append({
                             "source": c,
                             "target": d,
-                            "type": ctrl_type,
-                            "subtypes": []
+                            "type": ctrl_type.lower(),
+                            "subtypes": ctrl_subtype
                         })
 
         return pathway_id, entries, groups, relations
