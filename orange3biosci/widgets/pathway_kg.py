@@ -246,9 +246,10 @@ class OWPathwayKG(widget.OWWidget):
                 nodes[g] = {
                     "node_id": g,
                     "node_type": "gene",
-                    "label": g,
-                    "logic": ""
+                    "label": g
                 }
+                if aggregate_functional_units:
+                    nodes[g]["logic"] = ""
 
             if aggregate_functional_units:
                 logic = "OR" if len(genes) > 1 else "SINGLE"
@@ -275,9 +276,10 @@ class OWPathwayKG(widget.OWWidget):
                 nodes[g] = {
                     "node_id": g,
                     "node_type": "gene",
-                    "label": g,
-                    "logic": ""
+                    "label": g
                 }
+                if aggregate_functional_units:
+                    nodes[g]["logic"] = ""
 
             if aggregate_functional_units:
                 fu_id = f"FU_{uuid.uuid4().hex[:8]}"
@@ -295,9 +297,10 @@ class OWPathwayKG(widget.OWWidget):
         nodes[pathway_id] = {
             "node_id": pathway_id,
             "node_type": "pathway",
-            "label": pathway_id,
-            "logic": ""
+            "label": pathway_id
         }
+        if aggregate_functional_units:
+            nodes[pathway_id]["logic"] = ""
 
         # -------------------------
         # Build edges
