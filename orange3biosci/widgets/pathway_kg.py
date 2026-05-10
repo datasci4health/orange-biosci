@@ -30,6 +30,7 @@ class OWPathwayKG(widget.OWWidget):
     want_main_area = False
 
     filename = Setting("")
+    mapping_filename = Setting("")
     relative_to_workflow = Setting(False)
     auto_extract = Setting(False)
     aggregate_functional_units = Setting(True)
@@ -55,6 +56,20 @@ class OWPathwayKG(widget.OWWidget):
         file_layout.addWidget(self.file_edit)
         file_layout.addWidget(browse_button)
         gui.widgetBox(box).layout().addLayout(file_layout)
+
+        map_box = gui.widgetBox(self.controlArea, "Mapping File (Optional)")
+        self.map_file_edit = QLineEdit()
+        self.map_file_edit.setText(self.mapping_filename)
+        self.map_file_edit.textChanged.connect(self.on_map_file_changed)
+        self.map_file_edit.editingFinished.connect(self.on_file_edit_finished)
+
+        map_browse_button = QPushButton("Browse")
+        map_browse_button.clicked.connect(self.browse_map_file)
+
+        map_file_layout = QHBoxLayout()
+        map_file_layout.addWidget(self.map_file_edit)
+        map_file_layout.addWidget(map_browse_button)
+        gui.widgetBox(map_box).layout().addLayout(map_file_layout)
 
         gui.checkBox(
             box, self, "relative_to_workflow", "Relative to Workflow File",
@@ -95,22 +110,42 @@ class OWPathwayKG(widget.OWWidget):
             if self.auto_extract:
                 self.process()
 
+    def browse_map_file(self):
+        fname, _ = QFileDialog.getOpenFileName(
+            self, "Open Mapping File", "", "TSV files (*.tsv *.txt);;All files (*)"
+        )
+        if fname:
+            if self.relative_to_workflow:
+                fname = self.make_relative_path(fname)
+            self.mapping_filename = fname
+            self.map_file_edit.setText(fname)
+            if self.auto_extract:
+                self.process()
+
     def on_file_changed(self):
         self.filename = self.file_edit.text()
+
+    def on_map_file_changed(self):
+        self.mapping_filename = self.map_file_edit.text()
 
     def on_file_edit_finished(self):
         if self.auto_extract:
             self.process()
 
     def on_relative_path_changed(self):
-        if not self.filename:
-            return
+        if self.filename:
+            if self.relative_to_workflow:
+                self.filename = self.make_relative_path(self.filename)
+            else:
+                self.filename = self.get_absolute_path(self.filename)
+            self.file_edit.setText(self.filename)
 
-        if self.relative_to_workflow:
-            self.filename = self.make_relative_path(self.filename)
-        else:
-            self.filename = self.get_absolute_path(self.filename)
-        self.file_edit.setText(self.filename)
+        if self.mapping_filename:
+            if self.relative_to_workflow:
+                self.mapping_filename = self.make_relative_path(self.mapping_filename)
+            else:
+                self.mapping_filename = self.get_absolute_path(self.mapping_filename)
+            self.map_file_edit.setText(self.mapping_filename)
 
     def on_auto_extract_changed(self):
         if self.auto_extract:
@@ -167,12 +202,37 @@ class OWPathwayKG(widget.OWWidget):
         else:
             pathway_id, entries, groups, relations = self.parse_kegg(root)
 
-        nodes, edges = self.build_graph_from_data(
+        nodes_list, edges_list = self.build_graph_from_data(
             pathway_id, entries, groups, relations, self.aggregate_functional_units
         )
 
-        self.Outputs.nodes.send(self.to_table(nodes))
-        self.Outputs.edges.send(self.to_table(edges))
+        # Apply mapping if available
+        map_path = self.get_absolute_path(self.mapping_filename)
+        if map_path and os.path.exists(map_path):
+            mapping = {}
+            try:
+                with open(map_path, "r", encoding="utf-8") as f:
+                    for line in f:
+                        parts = line.strip().split("\t")
+                        if len(parts) >= 4:
+                            mapping[parts[0]] = parts[3]
+            except Exception as e:
+                self.Error.file_error(f"Failed to read mapping file: {e}")
+
+            for node in nodes_list:
+                nid = node["node_id"]
+                if nid in mapping:
+                    full_lbl = mapping[nid]
+                    node["full_label"] = full_lbl
+                    node["label"] = full_lbl.split(",")[0].strip()
+                else:
+                    node["full_label"] = ""
+        else:
+            for node in nodes_list:
+                node["full_label"] = ""
+
+        self.Outputs.nodes.send(self.to_table(nodes_list))
+        self.Outputs.edges.send(self.to_table(edges_list))
         self.setStatusMessage(os.path.basename(filename))
 
     # ------------------------------------------------------------
