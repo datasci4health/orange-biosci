@@ -15,7 +15,7 @@ from lxml import etree
 class OWPathwayKG(widget.OWWidget):
     name = "Pathway to Knowledge Graph"
     id = "orange.widgets.pathwaykg"
-    description = "Convert KEGG KGML into a Knowledge Graph"
+    description = "Convert KEGG KGML or BioPAX 3 into a Knowledge Graph"
     icon = str(files("orange3biosci") / "icons/PathwayKG.svg")
     priority = 10
     resizing_enabled = False
@@ -34,6 +34,7 @@ class OWPathwayKG(widget.OWWidget):
     relative_to_workflow = Setting(False)
     auto_extract = Setting(False)
     aggregate_functional_units = Setting(True)
+    pathway_as_property = Setting(False)
 
     # ------------------------------------------------------------
     # UI
@@ -42,7 +43,7 @@ class OWPathwayKG(widget.OWWidget):
     def __init__(self):
         super().__init__()
 
-        box = gui.widgetBox(self.controlArea, "KGML File")
+        box = gui.widgetBox(self.controlArea, "Pathway File")
 
         self.file_edit = QLineEdit()
         self.file_edit.setText(self.filename)
@@ -79,7 +80,13 @@ class OWPathwayKG(widget.OWWidget):
         gui.checkBox(
             self.controlArea, self, "aggregate_functional_units",
             "Aggregate Functional Units",
-            callback=self.on_aggregate_functional_units_changed
+            callback=self.on_settings_changed
+        )
+
+        gui.checkBox(
+            self.controlArea, self, "pathway_as_property",
+            "Pathway as Property",
+            callback=self.on_settings_changed
         )
 
         actions_box = gui.widgetBox(self.controlArea, orientation="horizontal")
@@ -151,7 +158,7 @@ class OWPathwayKG(widget.OWWidget):
         if self.auto_extract:
             self.process()
 
-    def on_aggregate_functional_units_changed(self):
+    def on_settings_changed(self):
         if self.auto_extract:
             self.process()
 
@@ -203,7 +210,7 @@ class OWPathwayKG(widget.OWWidget):
             pathway_id, entries, groups, relations = self.parse_kegg(root)
 
         nodes_list, edges_list = self.build_graph_from_data(
-            pathway_id, entries, groups, relations, self.aggregate_functional_units
+            pathway_id, entries, groups, relations, self.aggregate_functional_units, self.pathway_as_property
         )
 
         # Apply mapping if available
@@ -420,7 +427,7 @@ class OWPathwayKG(widget.OWWidget):
 
         return pathway_id, entries, groups, relations
 
-    def build_graph_from_data(self, pathway_id, entries, groups, relations, aggregate_functional_units=True):
+    def build_graph_from_data(self, pathway_id, entries, groups, relations, aggregate_functional_units=True, pathway_as_property=False):
 
         def get_genes(cid, visited=None):
             if visited is None:
@@ -466,7 +473,7 @@ class OWPathwayKG(widget.OWWidget):
 
             if aggregate_functional_units:
                 logic = "OR" if len(genes) > 1 else "SINGLE"
-                fu_id = f"FU_{uuid.uuid4().hex[:8]}"
+                fu_id = f"fu:{uuid.uuid4().hex[:8]}"
 
                 # FU node
                 nodes[fu_id] = {
@@ -495,7 +502,7 @@ class OWPathwayKG(widget.OWWidget):
                     nodes[g]["logic"] = ""
 
             if aggregate_functional_units:
-                fu_id = f"FU_{uuid.uuid4().hex[:8]}"
+                fu_id = f"fu:{uuid.uuid4().hex[:8]}"
 
                 nodes[fu_id] = {
                     "node_id": fu_id,
@@ -507,13 +514,19 @@ class OWPathwayKG(widget.OWWidget):
                 entry_to_fu[gid].append(fu_id)
 
         # --- Pathway node ---
-        nodes[pathway_id] = {
-            "node_id": pathway_id,
-            "node_type": "pathway",
-            "label": pathway_id
-        }
-        if aggregate_functional_units:
-            nodes[pathway_id]["logic"] = ""
+        if not pathway_as_property:
+            nodes[pathway_id] = {
+                "node_id": pathway_id,
+                "node_type": "pathway",
+                "label": pathway_id
+            }
+            if aggregate_functional_units:
+                nodes[pathway_id]["logic"] = ""
+
+        # --- Add pathway property to all nodes if requested ---
+        if pathway_as_property:
+            for n_id, n_data in nodes.items():
+                n_data["pathway"] = pathway_id
 
         # -------------------------
         # Build edges
@@ -538,31 +551,37 @@ class OWPathwayKG(widget.OWWidget):
                         edges.append({
                             "source": g,
                             "target": fu,
-                            "edge_type": "gene_to_FU",
+                            "edge_type": "gene_to_fu",
                             "edge_subtype": "",
                             "pathway_position_id": ""
                         })
 
                     # --- FU → pathway ---
-                    for pos in pathway_positions:
-                        edges.append({
-                            "source": fu,
-                            "target": pathway_id,
-                            "edge_type": "FU_to_pathway",
-                            "edge_subtype": "",
-                            "pathway_position_id": pos
-                        })
-                        for g in genes:
-                            gene_fu_pathway_positions.add((g, pos))
+                    if not pathway_as_property:
+                        for pos in pathway_positions:
+                            edges.append({
+                                "source": fu,
+                                "target": pathway_id,
+                                "edge_type": "fu_to_pathway",
+                                "edge_subtype": "",
+                                "pathway_position_id": pos
+                            })
+                            for g in genes:
+                                gene_fu_pathway_positions.add((g, pos))
+                    else:
+                        for pos in pathway_positions:
+                            for g in genes:
+                                gene_fu_pathway_positions.add((g, pos))
 
-        for gene, pos in sorted(gene_pathway_candidates - gene_fu_pathway_positions):
-            edges.append({
-                "source": gene,
-                "target": pathway_id,
-                "edge_type": "gene_to_pathway",
-                "edge_subtype": "",
-                "pathway_position_id": pos
-            })
+        if not pathway_as_property:
+            for gene, pos in sorted(gene_pathway_candidates - gene_fu_pathway_positions):
+                edges.append({
+                    "source": gene,
+                    "target": pathway_id,
+                    "edge_type": "gene_to_pathway",
+                    "edge_subtype": "",
+                    "pathway_position_id": pos
+                })
 
         # --- Relation edges ---
         for rel in relations:
@@ -571,6 +590,15 @@ class OWPathwayKG(widget.OWWidget):
 
             subtypes = "|".join(rel["subtypes"])
 
+            # Map relation types
+            rel_type_mapping = {
+                "ECrel": "enzyme_enzyme_interaction",
+                "PPrel": "protein_protein_interaction",
+                "PCrel": "protein_compound_interaction",
+                "GErel": "gene_expression_regulation"
+            }
+            mapped_type = rel_type_mapping.get(rel["type"], rel["type"])
+
             if aggregate_functional_units and entry_to_fu[src] and entry_to_fu[tgt]:
                 # --- FU ↔ FU ---
                 for fu1 in entry_to_fu[src]:
@@ -578,7 +606,7 @@ class OWPathwayKG(widget.OWWidget):
                         edges.append({
                             "source": fu1,
                             "target": fu2,
-                            "edge_type": rel["type"],
+                            "edge_type": mapped_type,
                             "edge_subtype": subtypes,
                             "pathway_position_id": ""
                         })
@@ -589,7 +617,7 @@ class OWPathwayKG(widget.OWWidget):
                         edges.append({
                             "source": g1,
                             "target": g2,
-                            "edge_type": rel["type"],
+                            "edge_type": mapped_type,
                             "edge_subtype": subtypes,
                             "pathway_position_id": ""
                         })
