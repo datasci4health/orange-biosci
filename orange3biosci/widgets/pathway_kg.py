@@ -351,31 +351,31 @@ class OWPathwayKG(widget.OWWidget):
                 "pathway_position_id": pos
             })
 
-        # --- Relation edges (new part) ---
+        # --- Relation edges ---
         for rel in relations:
             src = rel["source"]
             tgt = rel["target"]
 
             subtypes = "|".join(rel["subtypes"])
 
-            # --- gene ↔ gene ---
-            for g1 in entry_to_genes[src]:
-                for g2 in entry_to_genes[tgt]:
-                    edges.append({
-                        "source": g1,
-                        "target": g2,
-                        "edge_type": rel["type"],
-                        "edge_subtype": subtypes,
-                        "pathway_position_id": ""
-                    })
-
-            if aggregate_functional_units:
+            if aggregate_functional_units and entry_to_fu[src] and entry_to_fu[tgt]:
                 # --- FU ↔ FU ---
                 for fu1 in entry_to_fu[src]:
                     for fu2 in entry_to_fu[tgt]:
                         edges.append({
                             "source": fu1,
                             "target": fu2,
+                            "edge_type": rel["type"],
+                            "edge_subtype": subtypes,
+                            "pathway_position_id": ""
+                        })
+            else:
+                # --- gene ↔ gene ---
+                for g1 in entry_to_genes[src]:
+                    for g2 in entry_to_genes[tgt]:
+                        edges.append({
+                            "source": g1,
+                            "target": g2,
                             "edge_type": rel["type"],
                             "edge_subtype": subtypes,
                             "pathway_position_id": ""
