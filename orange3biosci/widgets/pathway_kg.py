@@ -84,7 +84,7 @@ class OWPathwayKG(widget.OWWidget):
 
     def browse_file(self):
         fname, _ = QFileDialog.getOpenFileName(
-            self, "Open KGML", "", "KGML files (*.xml *.kgml)"
+            self, "Open Pathway File", "", "KGML files (*.xml *.kgml);;BioPAX files (*.xml *.owl *.bp *.biopax);;All files (*)"
         )
         if fname:
             if self.relative_to_workflow:
@@ -162,7 +162,14 @@ class OWPathwayKG(widget.OWWidget):
 
         root = tree.getroot()
 
-        nodes, edges = self.build_graph(root, self.aggregate_functional_units)
+        if root.tag == "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}RDF":
+            pathway_id, entries, groups, relations = self.parse_biopax(root)
+        else:
+            pathway_id, entries, groups, relations = self.parse_kegg(root)
+
+        nodes, edges = self.build_graph_from_data(
+            pathway_id, entries, groups, relations, self.aggregate_functional_units
+        )
 
         self.Outputs.nodes.send(self.to_table(nodes))
         self.Outputs.edges.send(self.to_table(edges))
@@ -172,7 +179,7 @@ class OWPathwayKG(widget.OWWidget):
     # Graph construction
     # ------------------------------------------------------------
 
-    def build_graph(self, root, aggregate_functional_units=True):
+    def parse_kegg(self, root):
         entries = {}
         groups = {}
         relations = []
@@ -225,6 +232,134 @@ class OWPathwayKG(widget.OWWidget):
                 "subtypes": subtypes
             })
 
+        return pathway_id, entries, groups, relations
+
+    def parse_biopax(self, root):
+        entries = {}
+        groups = {}
+        relations = []
+
+        bp = "http://www.biopax.org/release/biopax-level3.owl#"
+        rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        ns = {"bp": bp, "rdf": rdf}
+
+        # Pathway
+        pathways = root.findall("bp:Pathway", ns)
+        if pathways:
+            pid = pathways[0].get(f"{{{rdf}}}about") or pathways[0].get(f"{{{rdf}}}ID")
+            if pid:
+                if pid.startswith("#"): pid = pid[1:]
+                pathway_id = pid.split("#")[-1]
+            else:
+                pathway_id = "pathway"
+        else:
+            pathway_id = "pathway"
+
+        # Physical Entities (treat as gene)
+        for entity_type in ["Protein", "Dna", "Rna", "SmallMolecule", "PhysicalEntity"]:
+            for elem in root.findall(f"bp:{entity_type}", ns):
+                eid = elem.get(f"{{{rdf}}}about") or elem.get(f"{{{rdf}}}ID")
+                if not eid: continue
+                if eid.startswith("#"): eid = eid[1:]
+
+                name_elem = elem.find("bp:displayName", ns)
+                if name_elem is None:
+                    name_elem = elem.find("bp:standardName", ns)
+                name = name_elem.text if name_elem is not None else eid.split("#")[-1]
+
+                entries[eid] = {
+                    "id": eid,
+                    "type": "gene",
+                    "name": name,
+                    "genes": [name],
+                    "reactions": [],
+                    "pathway_positions": [eid]
+                }
+
+        # Complexes (treat as group)
+        for elem in root.findall("bp:Complex", ns):
+            gid = elem.get(f"{{{rdf}}}about") or elem.get(f"{{{rdf}}}ID")
+            if not gid: continue
+            if gid.startswith("#"): gid = gid[1:]
+
+            comps = []
+            for comp in elem.findall("bp:component", ns):
+                res = comp.get(f"{{{rdf}}}resource")
+                if res:
+                    if res.startswith("#"): res = res[1:]
+                    comps.append(res)
+
+            groups[gid] = comps
+
+        # Relations (BiochemicalReaction)
+        for elem in root.findall("bp:BiochemicalReaction", ns):
+            lefts = []
+            for e in elem.findall("bp:left", ns):
+                r = e.get(f"{{{rdf}}}resource")
+                if r:
+                    if r.startswith("#"): r = r[1:]
+                    lefts.append(r)
+            rights = []
+            for e in elem.findall("bp:right", ns):
+                r = e.get(f"{{{rdf}}}resource")
+                if r:
+                    if r.startswith("#"): r = r[1:]
+                    rights.append(r)
+
+            for l in lefts:
+                for r in rights:
+                    relations.append({
+                        "source": l,
+                        "target": r,
+                        "type": "BiochemicalReaction",
+                        "subtypes": []
+                    })
+
+        # Relations (Control)
+        for ctrl_type in ["Control", "Catalysis", "Modulation", "TemplateReactionRegulation"]:
+            for elem in root.findall(f"bp:{ctrl_type}", ns):
+                controllers = []
+                for e in elem.findall("bp:controller", ns):
+                    r = e.get(f"{{{rdf}}}resource")
+                    if r:
+                        if r.startswith("#"): r = r[1:]
+                        controllers.append(r)
+                controlleds = []
+                for e in elem.findall("bp:controlled", ns):
+                    r = e.get(f"{{{rdf}}}resource")
+                    if r:
+                        if r.startswith("#"): r = r[1:]
+                        controlleds.append(r)
+
+                for c in controllers:
+                    for d in controlleds:
+                        relations.append({
+                            "source": c,
+                            "target": d,
+                            "type": ctrl_type,
+                            "subtypes": []
+                        })
+
+        return pathway_id, entries, groups, relations
+
+    def build_graph_from_data(self, pathway_id, entries, groups, relations, aggregate_functional_units=True):
+
+        def get_genes(cid, visited=None):
+            if visited is None:
+                visited = set()
+            if cid in visited:
+                return []
+            visited.add(cid)
+            
+            if cid in groups:
+                res = []
+                for child in groups[cid]:
+                    res.extend(get_genes(child, visited))
+                return res
+            elif cid in entries:
+                return entries[cid]["genes"]
+            return []
+
         # -------------------------
         # Build nodes
         # -------------------------
@@ -269,7 +404,7 @@ class OWPathwayKG(widget.OWWidget):
         for gid, comps in groups.items():
             genes = []
             for cid in comps:
-                genes.extend(entries[cid]["genes"])
+                genes.extend(get_genes(cid))
             entry_to_genes[gid] = genes
 
             for g in genes:
@@ -310,7 +445,7 @@ class OWPathwayKG(widget.OWWidget):
             (gene, pos)
             for eid, genes in entry_to_genes.items()
             for gene in genes
-            for pos in entries[eid]["pathway_positions"]
+            for pos in entries.get(eid, {}).get("pathway_positions", [eid])
         }
         gene_fu_pathway_positions = set()
 
@@ -318,7 +453,7 @@ class OWPathwayKG(widget.OWWidget):
         if aggregate_functional_units:
             for eid, fus in entry_to_fu.items():
                 genes = entry_to_genes[eid]
-                pathway_positions = entries[eid]["pathway_positions"]
+                pathway_positions = entries.get(eid, {}).get("pathway_positions", [eid])
 
                 for fu in fus:
                     for g in genes:

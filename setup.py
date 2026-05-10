@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 
 NAME = 'orange-biosci'
-VERSION = '0.9.0'
+VERSION = '0.9.1'
 DESCRIPTION = 'Custom Orange Bio Sci Widgets'
 AUTHOR = 'André Santanchè'
 URL = 'https://github.com/datasci4health/orange-biosci'
