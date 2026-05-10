@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 80 80"
+   version="1.1"
+   id="svg14"
+   sodipodi:docname="PathwayKG.svg"
+   width="80"
+   height="80"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     id="namedview14"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="8.38"
+     inkscape:cx="39.976134"
+     inkscape:cy="34.486874"
+     inkscape:window-width="1920"
+     inkscape:window-height="1043"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg14" />
+  <!-- Left pathway input nodes -->
+  <!-- Middle intermediate nodes -->
+  <!-- Functional Unit (central diamond hub) -->
+  <!-- Right output nodes -->
+  <!-- Pathway flow edges (left → middle) -->
+  <!-- Middle → FU -->
+  <!-- FU → outputs -->
+  <!-- Cross edges (KG aspect) -->
+  <line
+     x1="10"
+     y1="20"
+     x2="25"
+     y2="20"
+     stroke="#555555"
+     stroke-width="2"
+     id="line6" />
+  <line
+     x1="10"
+     y1="60"
+     x2="25"
+     y2="60"
+     stroke="#555555"
+     stroke-width="2"
+     id="line7" />
+  <line
+     x1="33.107502"
+     y1="22.119726"
+     x2="46.057175"
+     y2="36.937553"
+     stroke="#555555"
+     stroke-width="2.26206"
+     id="line8" />
+  <line
+     x1="33.030708"
+     y1="58.694328"
+     x2="45.537312"
+     y2="41.771065"
+     stroke="#555555"
+     stroke-width="2.37572"
+     id="line9" />
+  <line
+     x1="53.587299"
+     y1="37.105732"
+     x2="73.680008"
+     y2="20.758228"
+     stroke="#555555"
+     stroke-width="2.41649"
+     id="line10" />
+  <line
+     x1="53.906422"
+     y1="42.609192"
+     x2="71.928902"
+     y2="59.049519"
+     stroke="#555555"
+     stroke-width="2.2951"
+     id="line11" />
+  <line
+     x1="30"
+     y1="20"
+     x2="30"
+     y2="60"
+     stroke="#bbbbbb"
+     stroke-width="2"
+     stroke-dasharray="3, 3"
+     id="line12" />
+  <line
+     x1="5"
+     y1="20"
+     x2="30"
+     y2="60"
+     stroke="#bbbbbb"
+     stroke-width="2"
+     stroke-dasharray="3, 3"
+     id="line13" />
+  <line
+     x1="5"
+     y1="60"
+     x2="30"
+     y2="20"
+     stroke="#bbbbbb"
+     stroke-width="2"
+     stroke-dasharray="3, 3"
+     id="line14" />
+  <circle
+     cx="5"
+     cy="20"
+     r="5"
+     fill="#222222"
+     id="circle1" />
+  <circle
+     cx="5"
+     cy="60"
+     r="5"
+     fill="#222222"
+     id="circle2" />
+  <circle
+     cx="30"
+     cy="20"
+     r="5"
+     fill="#444444"
+     id="circle3" />
+  <circle
+     cx="30"
+     cy="60"
+     r="5"
+     fill="#444444"
+     id="circle4" />
+  <circle
+     cx="75"
+     cy="20"
+     r="5"
+     fill="#222222"
+     id="circle5" />
+  <circle
+     cx="75"
+     cy="60"
+     r="5"
+     fill="#222222"
+     id="circle6" />
+  <polygon
+     points="60,45 70,50 60,55 50,50 "
+     fill="#888888"
+     stroke="#222222"
+     stroke-width="2"
+     id="polygon4"
+     transform="translate(-10,-10)" />
+</svg>

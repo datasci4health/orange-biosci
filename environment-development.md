@@ -19,6 +19,7 @@ source .venv/bin/activate
 ~~~bash
 pip install orange3
 pip install pyqt5
+pip install lxml
 ~~~
 
 ~~~bash

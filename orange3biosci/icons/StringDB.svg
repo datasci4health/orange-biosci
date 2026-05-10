@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="100%"
-   viewBox="0 0 680 680"
+   width="571"
+   viewBox="0 0 570.99999 571"
    role="img"
    version="1.1"
    id="svg39"
    sodipodi:docname="StringDB.svg"
-   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   height="571"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs1" />
   <sodipodi:namedview
@@ -22,9 +26,9 @@
      inkscape:pageopacity="0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
-     inkscape:zoom="1.6866576"
-     inkscape:cx="312.45227"
-     inkscape:cy="333.20336"
+     inkscape:zoom="0.8433288"
+     inkscape:cx="-77.668402"
+     inkscape:cy="438.73754"
      inkscape:window-width="1920"
      inkscape:window-height="1043"
      inkscape:window-x="0"
@@ -32,187 +36,182 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="svg39" />
   <title
-     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"
      id="title7">STRING-DB Network widget icon</title>
   <desc
-     style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"
      id="desc7">A circular network graph icon with nodes in teal, amber, green and coral, connected by curved edges of varying weight, representing gene–gene interaction networks.</desc>
   <!-- Background circle -->
   <!-- ── Edges (draw before nodes so nodes sit on top) ── -->
   <!-- thick edges (high confidence) -->
-  <path
-     d="M 340,140 C 310,220 210,250 178,318"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:5px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path7"
-     transform="matrix(1.2660768,0,0,1.2660768,-92.340223,-75.357582)" />
-  <path
-     d="m 340,140 c 30,60 110,70 160,128"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:5px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path8"
-     transform="matrix(1.2660768,0,0,1.2660768,-92.340223,-75.357582)" />
-  <path
-     d="M 540.6982,263.95101 C 566.01973,329.787 553.35896,405.7516 528.03741,469.05545"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:5.69734px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path9" />
-  <path
-     d="m 133.02144,327.25485 c 27.8537,65.836 65.83601,116.47907 78.49677,179.78291"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:5.06431px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path10" />
-  <path
-     d="M 528.03741,469.05545 C 452.0728,545.02006 350.78666,570.3416 287.48282,595.66314"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:5.06431px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path11" />
-  <path
-     d="m 211.51821,507.03776 c 25.32154,50.64308 50.64308,73.43247 75.96461,88.62538"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:4.43127px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path12" />
   <!-- medium edges -->
-  <path
-     d="M 340,140 C 300,280 200,300 178,318"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:2.5px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path13"
-     transform="matrix(1.2660768,0,0,1.2660768,-92.340223,-75.357582)" />
-  <path
-     d="M 540.6982,263.95101 C 502.71588,355.10854 452.0728,418.41239 388.76897,443.73392"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:2.53214px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path14" />
-  <path
-     d="m 133.02144,327.25485 c 78.49677,27.85369 167.12215,53.17522 255.74753,116.47907"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:2.53214px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path15" />
-  <path
-     d="M 388.76897,443.73392 C 363.44744,507.03776 325.46512,557.68084 287.48282,595.66314"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:2.53214px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path16" />
-  <path
-     d="m 340,140 c 60,160 80,220 40,270"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:2px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path17"
-     transform="matrix(1.2660768,0,0,1.2660768,-92.340223,-75.357582)" />
-  <path
-     d="m 528.03741,469.05545 c -63.30383,0 -101.28614,-12.66076 -139.26844,-25.32153"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#a6a6a6;stroke-width:1.89912px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path18" />
-  <path
-     d="M 211.51821,507.03776 C 287.48282,494.377 338.12591,469.05545 388.76897,443.73392"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:1.89912px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     id="path19" />
   <!-- faint long-range edges -->
-  <path
-     stroke-dasharray="6 4"
-     d="M 133.02144,327.25485 C 287.48282,304.46546 477.39434,329.787 540.6982,263.95101"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:1.5193px;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:7.59646px, 5.06431px;stroke-opacity:1"
-     id="path20" />
-  <path
-     stroke-dasharray="6 4"
-     d="m 211.51821,507.03776 c 139.26845,12.66077 253.21537,0 316.5192,-37.98231"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:1.5193px;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:7.59646px, 5.06431px;stroke-opacity:1"
-     id="path21" />
   <!-- ── Nodes ── -->
   <!-- Central hub – large teal -->
-  <circle
-     cx="338.12585"
-     cy="101.89321"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#515151;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
-     id="circle21"
-     r="48.11092" />
-  <circle
-     cx="338.12585"
-     cy="101.89321"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     id="circle22"
-     r="48.11092" />
   <!-- Left node – coral -->
-  <circle
-     cx="133.02148"
-     cy="327.25482"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#7c7c7c;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
-     id="circle23"
-     r="37.982304" />
-  <circle
-     cx="133.02148"
-     cy="327.25482"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     id="circle24"
-     r="37.982304" />
   <!-- Right node – amber -->
-  <circle
-     cx="540.69818"
-     cy="263.95099"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#5f5f5f;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
-     id="circle25"
-     r="37.982304" />
-  <circle
-     cx="540.69818"
-     cy="263.95099"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     id="circle26"
-     r="37.982304" />
   <!-- Lower-right node – teal small -->
-  <circle
-     cx="528.03748"
-     cy="469.05542"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#434343;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
-     id="circle27"
-     r="30.385845" />
-  <circle
-     cx="528.03748"
-     cy="469.05542"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     id="circle28"
-     r="30.385845" />
   <!-- Lower-left node – green -->
-  <circle
-     cx="211.5182"
-     cy="507.03772"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#4b4b4b;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
-     id="circle29"
-     r="30.385845" />
-  <circle
-     cx="211.5182"
-     cy="507.03772"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     id="circle30"
-     r="30.385845" />
   <!-- Centre-right secondary – amber small -->
-  <circle
-     cx="388.76895"
-     cy="443.73386"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#505050;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
-     id="circle31"
-     r="25.321535" />
-  <circle
-     cx="388.76895"
-     cy="443.73386"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     id="circle32"
-     r="25.321535" />
   <!-- Bottom node – coral small -->
-  <circle
-     cx="287.48282"
-     cy="595.66296"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#595959;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
-     id="circle33"
-     r="25.321535" />
-  <circle
-     cx="287.48282"
-     cy="595.66296"
-     style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     id="circle34"
-     r="25.321535" />
+  <g
+     id="g1"
+     transform="translate(41.780237)">
+    <path
+       d="M 244.98582,50.009994 C 207.00352,151.29614 80.395839,189.27844 39.881382,275.37166"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:6.33038px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path7" />
+    <path
+       d="M 244.98582,50.009994 C 282.96813,125.9746 384.25427,138.63537 447.55811,212.06782"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:6.33038px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path8" />
+    <path
+       d="m 447.55813,212.06783 c 25.32153,65.83599 12.66076,141.80059 -12.66079,205.10444"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:5.69734px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path9" />
+    <path
+       d="m 39.881374,275.37167 c 27.8537,65.836 65.836006,116.47907 78.496766,179.78291"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:5.06431px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path10" />
+    <path
+       d="M 434.89734,417.17227 C 358.93273,493.13688 257.64659,518.45842 194.34275,543.77996"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:5.06431px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11" />
+    <path
+       d="m 118.37814,455.15458 c 25.32154,50.64308 50.64308,73.43247 75.96461,88.62538"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:4.43127px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path12" />
+    <path
+       d="M 244.98582,50.009994 C 194.34275,227.26075 67.735071,252.58228 39.881382,275.37166"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.16519px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path13" />
+    <path
+       d="M 447.55813,212.06783 C 409.57581,303.22536 358.93273,366.52921 295.6289,391.85074"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:2.53214px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path14" />
+    <path
+       d="M 39.881374,275.37167 C 118.37814,303.22536 207.00352,328.54689 295.6289,391.85074"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:2.53214px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path15" />
+    <path
+       d="M 295.6289,391.85074 C 270.30737,455.15458 232.32505,505.79766 194.34275,543.77996"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:2.53214px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path16" />
+    <path
+       d="M 244.98582,50.009994 C 320.95043,252.58228 346.27197,328.54689 295.6289,391.85073"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:2.53215px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path17" />
+    <path
+       d="m 434.89734,417.17227 c -63.30383,0 -101.28614,-12.66076 -139.26844,-25.32153"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#a6a6a6;stroke-width:1.89912px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path18" />
+    <path
+       d="m 118.37814,455.15458 c 75.96461,-12.66076 126.6077,-37.98231 177.25076,-63.30384"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:1.89912px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       id="path19" />
+    <path
+       stroke-dasharray="6 4"
+       d="M 39.881374,275.37167 C 194.34275,252.58228 384.25427,277.90382 447.55813,212.06783"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:1.5193px;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:7.59646px, 5.06431px;stroke-opacity:1"
+       id="path20" />
+    <path
+       stroke-dasharray="6 4"
+       d="m 118.37814,455.15458 c 139.26845,12.66077 253.21537,0 316.5192,-37.98231"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:1.5193px;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:7.59646px, 5.06431px;stroke-opacity:1"
+       id="path21" />
+    <circle
+       cx="244.98579"
+       cy="50.010036"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#515151;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
+       id="circle21"
+       r="48.11092" />
+    <circle
+       cx="244.98579"
+       cy="50.010036"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="circle22"
+       r="48.11092" />
+    <circle
+       cx="39.88142"
+       cy="275.37164"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#7c7c7c;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
+       id="circle23"
+       r="37.982304" />
+    <circle
+       cx="39.88142"
+       cy="275.37164"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="circle24"
+       r="37.982304" />
+    <circle
+       cx="447.55811"
+       cy="212.06781"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#5f5f5f;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
+       id="circle25"
+       r="37.982304" />
+    <circle
+       cx="447.55811"
+       cy="212.06781"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="circle26"
+       r="37.982304" />
+    <circle
+       cx="434.8974"
+       cy="417.17224"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#434343;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
+       id="circle27"
+       r="30.385845" />
+    <circle
+       cx="434.8974"
+       cy="417.17224"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="circle28"
+       r="30.385845" />
+    <circle
+       cx="118.37814"
+       cy="455.15454"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#4b4b4b;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
+       id="circle29"
+       r="30.385845" />
+    <circle
+       cx="118.37814"
+       cy="455.15454"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="circle30"
+       r="30.385845" />
+    <circle
+       cx="295.62888"
+       cy="391.85068"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#505050;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
+       id="circle31"
+       r="25.321535" />
+    <circle
+       cx="295.62888"
+       cy="391.85068"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="circle32"
+       r="25.321535" />
+    <circle
+       cx="194.34276"
+       cy="543.77979"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:#595959;fill-opacity:1;stroke:none;stroke-width:1.26607px;stroke-linecap:butt;stroke-linejoin:miter"
+       id="circle33"
+       r="25.321535" />
+    <circle
+       cx="194.34276"
+       cy="543.77979"
+       style="color:#000000;font-weight:400;font-size:16px;font-family:'Anthropic Sans', '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif;dominant-baseline:auto;text-anchor:start;opacity:1;fill:none;stroke:#000000;stroke-width:3.79823px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="circle34"
+       r="25.321535" />
+  </g>
   <!-- ── Score legend strip (bottom-right of circle) ── -->
   <!-- ── "STRING" wordmark at bottom ── -->
   <!-- Outer ring decoration -->
-  <circle
-     cx="340"
-     cy="340"
-     r="300"
-     style="fill:none;stroke:#000000;color:rgb(0, 0, 0);stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:'Anthropic Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto;stroke-opacity:1;stroke-dasharray:none"
-     id="circle38" />
-  <circle
-     cx="340"
-     cy="340"
-     r="294"
-     style="fill:none;stroke:#404040;color:rgb(0, 0, 0);stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:'Anthropic Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto;stroke-opacity:1;stroke-dasharray:none"
-     id="circle39" />
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>STRING-DB Network widget icon</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
 </svg>

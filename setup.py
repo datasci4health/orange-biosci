@@ -32,7 +32,8 @@ setup(
     install_requires=[
         'orange3>=3.32.0',
         "pandas",
-        "numpy"
+        "numpy",
+        "lxml"
     ],
     classifiers=[
         'Development Status :: 4 - Beta',

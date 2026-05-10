@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "orange-biosci"
-version = "0.8.3"
+version = "0.8.4"
 description = "Custom Orange Bio Sci Widgets"
 authors = [
     {name = "André Santanchè"}
@@ -22,7 +22,8 @@ classifiers = [
 dependencies = [
     "Orange3>=3.32.0",
     "pandas",
-    "numpy"
+    "numpy",
+    "lxml"
 ]
 
 [project.urls]
