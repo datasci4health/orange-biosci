@@ -32,6 +32,7 @@ class OWPathwayKG(widget.OWWidget):
     filename = Setting("")
     relative_to_workflow = Setting(False)
     auto_extract = Setting(False)
+    aggregate_functional_units = Setting(True)
 
     # ------------------------------------------------------------
     # UI
@@ -58,6 +59,12 @@ class OWPathwayKG(widget.OWWidget):
         gui.checkBox(
             box, self, "relative_to_workflow", "Relative to Workflow File",
             callback=self.on_relative_path_changed
+        )
+
+        gui.checkBox(
+            self.controlArea, self, "aggregate_functional_units",
+            "Aggregate Functional Units",
+            callback=self.on_aggregate_functional_units_changed
         )
 
         actions_box = gui.widgetBox(self.controlArea, orientation="horizontal")
@@ -109,6 +116,10 @@ class OWPathwayKG(widget.OWWidget):
         if self.auto_extract:
             self.process()
 
+    def on_aggregate_functional_units_changed(self):
+        if self.auto_extract:
+            self.process()
+
     def make_relative_path(self, path):
         workflow_dir = self.workflowEnv().get("basedir", "")
         if workflow_dir and os.path.isabs(path):
@@ -151,7 +162,7 @@ class OWPathwayKG(widget.OWWidget):
 
         root = tree.getroot()
 
-        nodes, edges = self.build_graph(root)
+        nodes, edges = self.build_graph(root, self.aggregate_functional_units)
 
         self.Outputs.nodes.send(self.to_table(nodes))
         self.Outputs.edges.send(self.to_table(edges))
@@ -161,7 +172,7 @@ class OWPathwayKG(widget.OWWidget):
     # Graph construction
     # ------------------------------------------------------------
 
-    def build_graph(self, root):
+    def build_graph(self, root, aggregate_functional_units=True):
         entries = {}
         groups = {}
         relations = []
@@ -231,17 +242,6 @@ class OWPathwayKG(widget.OWWidget):
                 continue
             entry_to_genes[eid] = genes
 
-            logic = "OR" if len(genes) > 1 else "SINGLE"
-            fu_id = f"FU_{uuid.uuid4().hex[:8]}"
-
-            # FU node
-            nodes[fu_id] = {
-                "node_id": fu_id,
-                "node_type": "functional_unit",
-                "label": fu_id,
-                "logic": logic
-            }
-
             for g in genes:
                 nodes[g] = {
                     "node_id": g,
@@ -250,7 +250,19 @@ class OWPathwayKG(widget.OWWidget):
                     "logic": ""
                 }
 
-            entry_to_fu[eid].append(fu_id)
+            if aggregate_functional_units:
+                logic = "OR" if len(genes) > 1 else "SINGLE"
+                fu_id = f"FU_{uuid.uuid4().hex[:8]}"
+
+                # FU node
+                nodes[fu_id] = {
+                    "node_id": fu_id,
+                    "node_type": "functional_unit",
+                    "label": fu_id,
+                    "logic": logic
+                }
+
+                entry_to_fu[eid].append(fu_id)
 
         # --- Group entries → AND FU ---
         for gid, comps in groups.items():
@@ -259,15 +271,6 @@ class OWPathwayKG(widget.OWWidget):
                 genes.extend(entries[cid]["genes"])
             entry_to_genes[gid] = genes
 
-            fu_id = f"FU_{uuid.uuid4().hex[:8]}"
-
-            nodes[fu_id] = {
-                "node_id": fu_id,
-                "node_type": "functional_unit",
-                "label": fu_id,
-                "logic": "AND"
-            }
-
             for g in genes:
                 nodes[g] = {
                     "node_id": g,
@@ -276,7 +279,17 @@ class OWPathwayKG(widget.OWWidget):
                     "logic": ""
                 }
 
-            entry_to_fu[gid].append(fu_id)
+            if aggregate_functional_units:
+                fu_id = f"FU_{uuid.uuid4().hex[:8]}"
+
+                nodes[fu_id] = {
+                    "node_id": fu_id,
+                    "node_type": "functional_unit",
+                    "label": fu_id,
+                    "logic": "AND"
+                }
+
+                entry_to_fu[gid].append(fu_id)
 
         # --- Pathway node ---
         nodes[pathway_id] = {
@@ -299,31 +312,32 @@ class OWPathwayKG(widget.OWWidget):
         gene_fu_pathway_positions = set()
 
         # --- Gene → FU and FU → pathway edges ---
-        for eid, fus in entry_to_fu.items():
-            genes = entry_to_genes[eid]
-            pathway_positions = entries[eid]["pathway_positions"]
+        if aggregate_functional_units:
+            for eid, fus in entry_to_fu.items():
+                genes = entry_to_genes[eid]
+                pathway_positions = entries[eid]["pathway_positions"]
 
-            for fu in fus:
-                for g in genes:
-                    edges.append({
-                        "source": g,
-                        "target": fu,
-                        "edge_type": "gene_to_FU",
-                        "edge_subtype": "",
-                        "pathway_position_id": ""
-                    })
-
-                # --- FU → pathway ---
-                for pos in pathway_positions:
-                    edges.append({
-                        "source": fu,
-                        "target": pathway_id,
-                        "edge_type": "FU_to_pathway",
-                        "edge_subtype": "",
-                        "pathway_position_id": pos
-                    })
+                for fu in fus:
                     for g in genes:
-                        gene_fu_pathway_positions.add((g, pos))
+                        edges.append({
+                            "source": g,
+                            "target": fu,
+                            "edge_type": "gene_to_FU",
+                            "edge_subtype": "",
+                            "pathway_position_id": ""
+                        })
+
+                    # --- FU → pathway ---
+                    for pos in pathway_positions:
+                        edges.append({
+                            "source": fu,
+                            "target": pathway_id,
+                            "edge_type": "FU_to_pathway",
+                            "edge_subtype": "",
+                            "pathway_position_id": pos
+                        })
+                        for g in genes:
+                            gene_fu_pathway_positions.add((g, pos))
 
         for gene, pos in sorted(gene_pathway_candidates - gene_fu_pathway_positions):
             edges.append({
@@ -352,16 +366,17 @@ class OWPathwayKG(widget.OWWidget):
                         "pathway_position_id": ""
                     })
 
-            # --- FU ↔ FU ---
-            for fu1 in entry_to_fu[src]:
-                for fu2 in entry_to_fu[tgt]:
-                    edges.append({
-                        "source": fu1,
-                        "target": fu2,
-                        "edge_type": rel["type"],
-                        "edge_subtype": subtypes,
-                        "pathway_position_id": ""
-                    })
+            if aggregate_functional_units:
+                # --- FU ↔ FU ---
+                for fu1 in entry_to_fu[src]:
+                    for fu2 in entry_to_fu[tgt]:
+                        edges.append({
+                            "source": fu1,
+                            "target": fu2,
+                            "edge_type": rel["type"],
+                            "edge_subtype": subtypes,
+                            "pathway_position_id": ""
+                        })
 
         return list(nodes.values()), edges
 
