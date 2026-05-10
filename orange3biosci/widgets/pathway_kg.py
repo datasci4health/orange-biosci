@@ -219,6 +219,7 @@ class OWPathwayKG(widget.OWWidget):
         # -------------------------
         nodes = {}
         entry_to_fu = defaultdict(list)
+        entry_to_genes = defaultdict(list)
 
         # --- Gene entries → FU ---
         for eid, e in entries.items():
@@ -228,6 +229,7 @@ class OWPathwayKG(widget.OWWidget):
             genes = e["genes"]
             if not genes:
                 continue
+            entry_to_genes[eid] = genes
 
             logic = "OR" if len(genes) > 1 else "SINGLE"
             fu_id = f"FU_{uuid.uuid4().hex[:8]}"
@@ -248,13 +250,14 @@ class OWPathwayKG(widget.OWWidget):
                     "logic": ""
                 }
 
-                entry_to_fu[eid].append(fu_id)
+            entry_to_fu[eid].append(fu_id)
 
         # --- Group entries → AND FU ---
         for gid, comps in groups.items():
             genes = []
             for cid in comps:
                 genes.extend(entries[cid]["genes"])
+            entry_to_genes[gid] = genes
 
             fu_id = f"FU_{uuid.uuid4().hex[:8]}"
 
@@ -287,10 +290,17 @@ class OWPathwayKG(widget.OWWidget):
         # Build edges
         # -------------------------
         edges = []
+        gene_pathway_candidates = {
+            (gene, pos)
+            for eid, genes in entry_to_genes.items()
+            for gene in genes
+            for pos in entries[eid]["pathway_positions"]
+        }
+        gene_fu_pathway_positions = set()
 
-        # --- Gene ↔ FU edges ---
+        # --- Gene → FU and FU → pathway edges ---
         for eid, fus in entry_to_fu.items():
-            genes = entries[eid]["genes"]
+            genes = entry_to_genes[eid]
             pathway_positions = entries[eid]["pathway_positions"]
 
             for fu in fus:
@@ -299,14 +309,6 @@ class OWPathwayKG(widget.OWWidget):
                         "source": g,
                         "target": fu,
                         "edge_type": "gene_to_FU",
-                        "edge_subtype": "",
-                        "pathway_position_id": ""
-                    })
-
-                    edges.append({
-                        "source": fu,
-                        "target": g,
-                        "edge_type": "FU_to_gene",
                         "edge_subtype": "",
                         "pathway_position_id": ""
                     })
@@ -320,6 +322,17 @@ class OWPathwayKG(widget.OWWidget):
                         "edge_subtype": "",
                         "pathway_position_id": pos
                     })
+                    for g in genes:
+                        gene_fu_pathway_positions.add((g, pos))
+
+        for gene, pos in sorted(gene_pathway_candidates - gene_fu_pathway_positions):
+            edges.append({
+                "source": gene,
+                "target": pathway_id,
+                "edge_type": "gene_to_pathway",
+                "edge_subtype": "",
+                "pathway_position_id": pos
+            })
 
         # --- Relation edges (new part) ---
         for rel in relations:
@@ -329,8 +342,8 @@ class OWPathwayKG(widget.OWWidget):
             subtypes = "|".join(rel["subtypes"])
 
             # --- gene ↔ gene ---
-            for g1 in entries[src]["genes"]:
-                for g2 in entries[tgt]["genes"]:
+            for g1 in entry_to_genes[src]:
+                for g2 in entry_to_genes[tgt]:
                     edges.append({
                         "source": g1,
                         "target": g2,
