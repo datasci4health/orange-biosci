@@ -8,7 +8,7 @@ from AnyQt.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit, QPushButton
 
 from Orange.widgets import widget, gui
 from Orange.widgets.settings import Setting
-from Orange.data import Table, Domain, StringVariable
+from Orange.data import Table, Domain, StringVariable, DiscreteVariable
 
 from lxml import etree
 
@@ -232,14 +232,24 @@ class OWPathwayKG(widget.OWWidget):
                     full_lbl = mapping[nid]
                     node["full_label"] = full_lbl
                     node["label"] = full_lbl.split(",")[0].strip()
+                    if ";" in node["label"]:
+                        node["label"] = node["label"].split(";")[0].strip()
                 else:
                     node["full_label"] = ""
         else:
             for node in nodes_list:
                 node["full_label"] = ""
 
-        self.Outputs.nodes.send(self.to_table(nodes_list))
-        self.Outputs.edges.send(self.to_table(edges_list))
+        # Make lookup dictionary of updated nodes
+        nodes_lookup = {n["id"]: n for n in nodes_list}
+
+        # --- Update source_label and target_label for edges after node mapping ---
+        for edg in edges_list:
+            edg["source_label"] = nodes_lookup.get(edg["source"], {}).get("label", "")
+            edg["target_label"] = nodes_lookup.get(edg["target"], {}).get("label", "")
+
+        self.Outputs.nodes.send(self.to_table(nodes_list, categorical_cols={"type", "logic", "pathway"}))
+        self.Outputs.edges.send(self.to_table(edges_list, categorical_cols={"type", "subtype"}))
         self.setStatusMessage(os.path.basename(filename))
 
     # ------------------------------------------------------------
@@ -634,16 +644,29 @@ class OWPathwayKG(widget.OWWidget):
     # Convert to Orange Table
     # ------------------------------------------------------------
 
-    def to_table(self, rows):
+    def to_table(self, rows, categorical_cols=None):
         if not rows:
             return None
+            
+        if categorical_cols is None:
+            categorical_cols = set()
 
-        # All columns are strings → use metas
-        meta_vars = [StringVariable(k) for k in rows[0].keys()]
-        domain = Domain([], metas=meta_vars)
+        keys = list(rows[0].keys())
+        attributes = []
+        metas = []
+
+        for k in keys:
+            if k in categorical_cols:
+                unique_vals = sorted(list({str(row.get(k, "")) for row in rows}))
+                attributes.append(DiscreteVariable(k, values=unique_vals))
+            else:
+                metas.append(StringVariable(k))
+
+        domain = Domain(attributes, metas=metas)
+        all_vars = attributes + metas
 
         data = [
-            [str(row.get(var.name, "")) for var in meta_vars]
+            [str(row.get(var.name, "")) for var in all_vars]
             for row in rows
         ]
 
